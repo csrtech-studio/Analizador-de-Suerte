@@ -1,0 +1,146 @@
+/* Asegúrate de que todo el cuerpo ocupe el 100% de la pantalla */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+
+/* Centrar el contenido en el main */
+main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Configuración para el video */
+#camera {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la imagen de la cámara cubriendo todo el contenedor sin distorsionar */
+    display: block;
+}
+
+/* Canvas debe ocupar todo el espacio disponible */
+#canvas {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Overlay centrado */
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro para mejor visibilidad */
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+#medidor {
+    width: 100%;
+    height: 20px;
+    margin: 10px 0;
+    background-color: #ddd; /* Fondo gris */
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#medidor-container {
+    width: 100%;
+    max-width: 500px; /* Tamaño máximo */
+    margin: 0 auto;
+    position: relative;
+}
+
+
+
+#resultado .porcentaje {
+    display: block;
+    font-size: 2.5em; /* Tamaño mayor para el porcentaje */
+    margin-bottom: 10px; /* Espacio entre el porcentaje y el mensaje */
+}
+
+#resultado .mensaje {
+    display: block;
+    font-size: 1.2em; /* Tamaño más pequeño para el mensaje */
+}
+
+
+/* Botón de tomar foto */
+button {
+    position: absolute;
+    bottom: 20px;
+    padding: 10px 20px;
+    background-color: #f39c12;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#resultado {
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#resultado .porcentaje {
+    display: block;
+    font-size: 2.5em; /* Tamaño mayor para el porcentaje */
+    margin-bottom: 10px; /* Espacio entre el porcentaje y el mensaje */
+}
+
+#resultado .mensaje {
+    display: block;
+    font-size: 1.2em; /* Tamaño más pequeño para el mensaje */
+}
+
+/* Diseño responsivo para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+    #medidor-container {
+        font-size: 4vw;
+    }
+    #resultado {
+        font-size: 5vw;
+    }
+    #medidor {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #medidor-container {
+        font-size: 5vw;
+    }
+    #resultado {
+        font-size: 6vw;
+    }
+    #medidor {
+        width: 95%;
+    }
+}
