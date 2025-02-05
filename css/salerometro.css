@@ -56,7 +56,15 @@ button:hover {
     border-radius: 10px;
     text-align: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;  /* El contenedor puede ocupar el ancho completo */
+    max-width: 600px;  /* Limita el ancho máximo a 600px */
+    height: 150px;  /* Altura fija para el contenedor */
+    margin: 0 auto;  /* Centra el contenedor */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* Espacia el mensaje y la barra de progreso */
 }
+
 
 /* Barra de progreso */
 progress {
