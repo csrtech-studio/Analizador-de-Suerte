@@ -8,7 +8,7 @@ const frasesAnalisis = [
     "Detectando influencia cósmica...",
     "Comparando con niveles oceánicos...",
     "Verificando compatibilidad con la buena suerte...",
-    "Analisis Completo."
+    "Análisis Completo."
 ];
 
 const frasesFinales = [
@@ -27,42 +27,57 @@ const frasesFinales = [
     { porcentaje: "0%", mensaje: "¡Eres más dulce que un caramelo, pero sin suerte en este análisis!" }
 ];
 
+let fotoTomada = false;
+
 function mostrarResultado(sal) {
     let resultado = document.getElementById('resultado');
     let resultadoFrase = frasesFinales[Math.floor(sal / 10)];
-    
-;
-
+    resultado.innerHTML = `
+        <span class="porcentaje">${resultadoFrase.porcentaje}</span>
+        <span class="mensaje">${resultadoFrase.mensaje}</span>
+    `;
 }
-
-
 
 function tomarFoto() {
     let video = document.getElementById('camera');
     let canvas = document.getElementById('canvas');
     let context = canvas.getContext('2d');
-    
-    // Ocultar el overlay antes de tomar la foto
-    document.getElementById('overlay').style.display = 'none';
 
-    // Tomar la foto y dibujarla en el canvas
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
-    // Detener la cámara si está activa
-    if (video.srcObject) {
-        video.srcObject.getTracks().forEach(track => track.stop());
+    if (!fotoTomada) {
+        // Activar la cámara solo cuando el usuario haga clic en el botón
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => console.error("No se pudo acceder a la cámara:", err));
+
+        // Mostrar la cámara en el video y permitir al usuario tomar una foto
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+        fotoTomada = true;
+    } else {
+        // Tomar la foto después de que el usuario hace clic en "Tomar Foto"
+        let imagen = document.createElement('img');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        imagen.src = canvas.toDataURL('image/png');
+        document.body.appendChild(imagen); // Mostrar la imagen
+
+        // Detener la cámara
+        let stream = video.srcObject;
+        let tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+        video.style.display = 'none'; // Ocultar la cámara
+
+        // Iniciar análisis
+        setTimeout(() => {
+            // Mostrar el overlay
+            document.getElementById('overlay').style.display = 'flex';
+            iniciarMedidor(context, canvas);
+        }, 1000); // Esperar 1 segundo antes de iniciar el análisis
     }
-    
-    // Mostrar el overlay (medidor y resultado) después de un breve retraso
-    setTimeout(() => {
-        document.getElementById('overlay').style.display = 'flex'; // Mostrar overlay
-        iniciarMedidor(context, canvas); // Iniciar el medidor
-    }, 1000); // El retraso de 1 segundo antes de mostrar el overlay
 }
-
-
 
 function iniciarMedidor(context, canvas) {
     let progreso = 0;
@@ -85,9 +100,11 @@ function iniciarMedidor(context, canvas) {
             indexFrase++;
         }
 
-        // Dibujar el porcentaje sobre la imagen
-        context.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
-        context.drawImage(document.getElementById('camera'), 0, 0, canvas.width, canvas.height); // Redibujar la foto
+        // Limpiar el canvas y redibujar la foto solo al inicio
+        if (progreso === 0) {
+            context.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
+            context.drawImage(document.getElementById('camera'), 0, 0, canvas.width, canvas.height); // Redibujar la foto
+        }
 
         // Dibujar un fondo transparente para el medidor
         context.fillStyle = "rgba(0, 0, 0, 0.6)";
@@ -104,22 +121,22 @@ function iniciarMedidor(context, canvas) {
         // Mostrar el resultado al terminar el análisis
         if (progreso >= 100) {
             clearInterval(intervalo);
-            resultado.textContent = frasesFinales[Math.floor(Math.random() * frasesFinales.length)];
 
-            // Mostrar el resultado en el canvas
-            context.fillStyle = "#FFF";
-            context.font = "25px Arial";
-            context.fillText(resultado.textContent, 30, canvas.height - 30);
+            // Ocultar la imagen y medidor
+            context.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
+
+            // Mostrar solo el porcentaje y resultado
+            mostrarResultado(Math.random() * 100); // Mostrar un resultado aleatorio para el porcentaje
+
+            // Después de mostrar el resultado, borrar la imagen y medidor
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none'; // Ocultar overlay
+            }, 1000); // Esperar 1 segundo antes de ocultar
         }
     }, incremento);
 }
 
-// Activar la cámara al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
     let video = document.getElementById('camera');
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(err => console.error("No se pudo acceder a la cámara:", err));
+    video.style.display = 'none'; // Inicialmente ocultar el video
 });
