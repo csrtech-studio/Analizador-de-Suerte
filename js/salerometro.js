@@ -8,8 +8,13 @@ const frasesAnalisis = [
     "Detectando influencia cósmica...",
     "Comparando con niveles oceánicos...",
     "Verificando compatibilidad con la buena suerte...",
+    "Calculando el nivel de sal universal...",
+    "Sintonizando con las energías del mar...",
+    "Evaluando el impacto de tus decisiones saladas...",
+    "Realizando un ajuste final en las vibraciones salinas....",
     "Análisis Completo."
 ];
+
 
 const frasesFinales = [
     { porcentaje: "100%", mensaje: "Estás más salado que el chamoy." },
@@ -31,112 +36,92 @@ let fotoTomada = false;
 
 function mostrarResultado(sal) {
     let resultado = document.getElementById('resultado');
-    let resultadoFrase = frasesFinales[Math.floor(sal / 10)];
+    let finalResult = getFinalResult();
     resultado.innerHTML = `
-        <span class="porcentaje">${resultadoFrase.porcentaje}</span>
-        <span class="mensaje">${resultadoFrase.mensaje}</span>
+        <span class="porcentaje">${finalResult.porcentaje}</span><br>
+        <span class="mensaje">${finalResult.mensaje}</span>
     `;
+    
 }
 
-function tomarFoto() {
-    let video = document.getElementById('camera');
-    let canvas = document.getElementById('canvas');
-    let context = canvas.getContext('2d');
+document.getElementById("take-photo-btn").addEventListener("click", async function() {
+    // Abrir la cámara del dispositivo
+    let stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    let video = document.createElement('video');
+    video.srcObject = stream;
+    video.play();
 
-    if (!fotoTomada) {
-        // Activar la cámara solo cuando el usuario haga clic en el botón
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => console.error("No se pudo acceder a la cámara:", err));
+    // Crear un canvas para tomar la foto
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
 
-        // Mostrar la cámara en el video y permitir al usuario tomar una foto
-        video.style.display = 'block';
-        canvas.style.display = 'none';
-        fotoTomada = true;
-    } else {
-        // Tomar la foto después de que el usuario hace clic en "Tomar Foto"
-        let imagen = document.createElement('img');
+    // Después de unos segundos, tomar la foto
+    setTimeout(() => {
+        // Dibujar la imagen en el canvas
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        imagen.src = canvas.toDataURL('image/png');
-        document.body.appendChild(imagen); // Mostrar la imagen
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         // Detener la cámara
-        let stream = video.srcObject;
-        let tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
-        video.style.display = 'none'; // Ocultar la cámara
+        stream.getTracks().forEach(track => track.stop());
 
-        // Iniciar análisis
+        // Mostrar la foto en la página
+        let photo = document.getElementById("photo");
+        photo.src = canvas.toDataURL();
+        photo.style.display = "block"; // Hacer visible la foto
+
+        // Iniciar análisis después de 2 segundos
         setTimeout(() => {
-            // Mostrar el overlay
-            document.getElementById('overlay').style.display = 'flex';
-            iniciarMedidor(context, canvas);
-        }, 1000); // Esperar 1 segundo antes de iniciar el análisis
-    }
+            iniciarAnalisis();
+        }, 2000);
+    }, 2000);
+});
+
+function iniciarAnalisis() {
+    // Mostrar el overlay con la barra de progreso
+    document.getElementById("overlay").style.display = "flex";
+
+    let progressBar = document.getElementById("progress-bar");
+    let progressMessage = document.getElementById("progress-message");
+    let resultMessage = document.getElementById("result-message");
+
+    let progress = 0;
+    let phraseIndex = 0; // Variable para cambiar las frases de análisis
+
+    // Actualizar el mensaje de progreso cada 1.5 segundos (para que dure 15 segundos en total)
+    let interval = setInterval(() => {
+        progress += 6.67; // Para que dure 15 segundos, incrementa cada 1.5 segundos (100 / 15 = 6.67)
+        progressBar.value = progress;
+
+        // Mostrar las frases de análisis durante el progreso
+        if (phraseIndex < frasesAnalisis.length) {
+            progressMessage.textContent = frasesAnalisis[phraseIndex++];
+        }
+
+        // Cuando el progreso llega al 100%, finalizar y mostrar el resultado
+        if (progress >= 100) {
+            clearInterval(interval);
+            let finalResult = getFinalResult(progress); // Obtener resultado final
+            resultMessage.innerHTML = `
+                <span class="porcentaje">${finalResult.porcentaje}</span><br>
+                <span class="mensaje">${finalResult.mensaje}</span>
+            `;
+            resultMessage.style.display = "block"; // Mostrar el resultado
+
+            // Mostrar el botón de reiniciar
+            document.getElementById("reiniciar-btn").style.display = "block";
+        }
+    }, 1500); // Cada 1.5 segundos incrementa el progreso
 }
 
-function iniciarMedidor(context, canvas) {
-    let progreso = 0;
-    let medidor = document.getElementById('medidor');
-    let mensaje = document.getElementById('mensaje');
-    let resultado = document.getElementById('resultado');
-    
-    let indexFrase = 0;
-    let tiempoTotal = 20000; // 20 segundos
-    let intervalos = 10;
-    let incremento = tiempoTotal / intervalos; // Cada actualización durará 2 segundos
-
-    let intervalo = setInterval(() => {
-        progreso += 10;
-        medidor.value = progreso;
-
-        // Actualizar frase de análisis cada 10%
-        if (indexFrase < frasesAnalisis.length) {
-            mensaje.textContent = frasesAnalisis[indexFrase];
-            indexFrase++;
-        }
-
-        // Limpiar el canvas y redibujar la foto solo al inicio
-        if (progreso === 0) {
-            context.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
-            context.drawImage(document.getElementById('camera'), 0, 0, canvas.width, canvas.height); // Redibujar la foto
-        }
-
-        // Dibujar un fondo transparente para el medidor
-        context.fillStyle = "rgba(0, 0, 0, 0.6)";
-        context.fillRect(20, canvas.height - 80, 260, 50);
-
-        // Mostrar porcentaje sobre la imagen
-        context.fillStyle = "#FFF";
-        context.font = "20px Arial";
-        context.fillText("Salinidad: " + progreso + "%", 30, canvas.height - 50);
-
-        // Agregar el análisis de texto en el canvas
-        context.fillText(mensaje.textContent, 30, 30);
-
-        // Mostrar el resultado al terminar el análisis
-        if (progreso >= 100) {
-            clearInterval(intervalo);
-
-            // Ocultar la imagen y medidor
-            context.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
-
-            // Mostrar solo el porcentaje y resultado
-            mostrarResultado(Math.random() * 100); // Mostrar un resultado aleatorio para el porcentaje
-
-            // Después de mostrar el resultado, borrar la imagen y medidor
-            setTimeout(() => {
-                document.getElementById('overlay').style.display = 'none'; // Ocultar overlay
-            }, 1000); // Esperar 1 segundo antes de ocultar
-        }
-    }, incremento);
+// Función para obtener el resultado final basado en el porcentaje
+function getFinalResult() {
+    // Seleccionar un resultado aleatorio de frasesFinales
+    let resultadoAleatorio = frasesFinales[Math.floor(Math.random() * frasesFinales.length)];
+    return resultadoAleatorio;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    let video = document.getElementById('camera');
-    video.style.display = 'none'; // Inicialmente ocultar el video
+// Evento para reiniciar la página
+document.getElementById("reiniciar-btn").addEventListener("click", function() {
+    location.reload(); // Recarga la página
 });

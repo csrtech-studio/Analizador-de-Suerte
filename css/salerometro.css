@@ -1,159 +1,94 @@
-/* Asegúrate de que todo el cuerpo ocupe el 100% de la pantalla */
-html, body {
-    height: 100%;
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
     margin: 0;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #1c1c1c; /* Fondo más oscuro */
-    color: #f4f4f4; /* Color de texto más suave */
-    position: relative; /* Para asegurar que los elementos se posicionen correctamente */
+    padding: 0;
 }
 
-/* Centrar el contenido en el main */
-main {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Evitar el desbordamiento */
-}
-
-/* Configuración para el video */
-#camera {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px; /* Bordes redondeados para un toque más elegante */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra sutil para profundidad */
-}
-
-/* Canvas debe ocupar todo el espacio disponible */
-#canvas {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px; /* Bordes redondeados */
-}
-
-/* Overlay centrado */
-#overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.7); /* Fondo más oscuro para mayor contraste */
-    color: #fff;
+/* Contenedor de la cámara */
+#camera-container {
+    margin: 100px auto;
     text-align: center;
-    padding: 20px;
-    border-radius: 10px; /* Bordes redondeados para el overlay */
 }
 
-/* Estilo para el medidor de progreso */
-#medidor {
-    width: 80%;
-    height: 20px;
-    margin: 10px 0;
-    background-color: #3e3e3e; /* Fondo más oscuro */
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Sombra sutil */
-}
-
-#medidor-container {
-    width: 100%;
-    max-width: 500px; /* Tamaño máximo */
-    margin: 0 auto;
-    position: relative;
-}
-
-/* Estilo para el resultado final */
-#resultado {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente para el resultado */
-    padding: 20px;
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra de profundidad */
-}
-
-/* Ajustar tamaño del porcentaje y mensaje */
-#resultado .porcentaje {
+#photo {
+    width: 300px;
+    height: auto;
     display: block;
-    font-size: 3rem; /* Tamaño mayor para el porcentaje */
-    margin-bottom: 15px;
+    margin: 10px auto;
 }
 
-#resultado .mensaje {
-    display: block;
-    font-size: 1.5rem; /* Tamaño más pequeño para el mensaje */
-    line-height: 1.4;
-}
-
-/* Botón de tomar foto */
+/* Botón centrado */
 button {
-    position: absolute;
-    bottom: 30px; /* Aseguramos que el botón se posicione en la parte inferior */
-    padding: 15px 30px;
-    background-color: #f39c12;
-    border: none;
+    background-color: #007BFF;
     color: white;
-    font-size: 1.6rem;
-    font-weight: bold;
-    border-radius: 8px;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra sutil */
-    z-index: 10; /* Asegura que el botón esté por encima de otros elementos */
+    transition: 0.3s;
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #e67e22; /* Color más oscuro al pasar el mouse */
-    transform: translateY(-3px); /* Efecto de "lift" al pasar el mouse */
+    background-color: #0056b3;
 }
 
-button:active {
-    background-color: #d35400; /* Color más oscuro al hacer clic */
-    transform: translateY(0); /* Vuelve a la posición original */
+/* Overlay de análisis */
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
 }
 
-/* Diseño responsivo para pantallas pequeñas */
-@media screen and (max-width: 768px) {
-    #medidor-container {
-        font-size: 5vw;
-    }
-    #resultado {
-        font-size: 5vw;
-    }
-    #medidor {
-        width: 90%;
-    }
+#progress-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
-@media screen and (max-width: 480px) {
-    #medidor-container {
-        font-size: 6vw;
-    }
-    #resultado {
-        font-size: 6vw;
-    }
-    #medidor {
-        width: 95%;
-    }
+/* Barra de progreso */
+progress {
+    width: 100%;
+    height: 20px;
+    margin: 10px 0;
+}
+#progress-message {
+    min-height: 40px; /* Ajusta según el tamaño promedio del texto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Mensaje emergente (Modal) */
+#result-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+#reiniciar-btn {
+    display: block;
+    margin: 10px auto;
 }
