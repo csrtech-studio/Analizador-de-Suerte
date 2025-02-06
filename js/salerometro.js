@@ -11,10 +11,9 @@ const frasesAnalisis = [
     "Calculando el nivel de sal universal...",
     "Sintonizando con las energías del mar...",
     "Evaluando el impacto de tus decisiones saladas...",
-    "Realizando un ajuste final en las vibraciones salinas....",
+    "Realizando un ajuste final en las vibraciones salinas...",
     "Análisis Completo."
 ];
-
 
 const frasesFinales = [
     { porcentaje: "100%", mensaje: "Estás más salado que el chamoy." },
@@ -32,53 +31,27 @@ const frasesFinales = [
     { porcentaje: "0%", mensaje: "¡Eres más dulce que un caramelo, pero sin suerte en este análisis!" }
 ];
 
-let fotoTomada = false;
+// Escuchar cambios en el input de la cámara
+document.getElementById("camera-input").addEventListener("change", function(event) {
+    let file = event.target.files[0];
 
-function mostrarResultado(sal) {
-    let resultado = document.getElementById('resultado');
-    let finalResult = getFinalResult();
-    resultado.innerHTML = `
-        <span class="porcentaje">${finalResult.porcentaje}</span><br>
-        <span class="mensaje">${finalResult.mensaje}</span>
-    `;
-    
-}
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let photo = document.getElementById("photo");
+            photo.src = e.target.result;
+            photo.style.display = "block"; // Mostrar la imagen
+        };
+        reader.readAsDataURL(file);
 
-document.getElementById("take-photo-btn").addEventListener("click", async function() {
-    // Abrir la cámara del dispositivo
-    let stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    let video = document.createElement('video');
-    video.srcObject = stream;
-    video.play();
-
-    // Crear un canvas para tomar la foto
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-
-    // Después de unos segundos, tomar la foto
-    setTimeout(() => {
-        // Dibujar la imagen en el canvas
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Detener la cámara
-        stream.getTracks().forEach(track => track.stop());
-
-        // Mostrar la foto en la página
-        let photo = document.getElementById("photo");
-        photo.src = canvas.toDataURL();
-        photo.style.display = "block"; // Hacer visible la foto
-
-        // Iniciar análisis después de 2 segundos
+        // Iniciar análisis después de seleccionar la imagen
         setTimeout(() => {
             iniciarAnalisis();
         }, 2000);
-    }, 2000);
+    }
 });
 
 function iniciarAnalisis() {
-    // Mostrar el overlay con la barra de progreso
     document.getElementById("overlay").style.display = "flex";
 
     let progressBar = document.getElementById("progress-bar");
@@ -86,42 +59,34 @@ function iniciarAnalisis() {
     let resultMessage = document.getElementById("result-message");
 
     let progress = 0;
-    let phraseIndex = 0; // Variable para cambiar las frases de análisis
+    let phraseIndex = 0;
 
-    // Actualizar el mensaje de progreso cada 1.5 segundos (para que dure 15 segundos en total)
     let interval = setInterval(() => {
-        progress += 6.67; // Para que dure 15 segundos, incrementa cada 1.5 segundos (100 / 15 = 6.67)
+        progress += 6.67;
         progressBar.value = progress;
 
-        // Mostrar las frases de análisis durante el progreso
         if (phraseIndex < frasesAnalisis.length) {
             progressMessage.textContent = frasesAnalisis[phraseIndex++];
         }
 
-        // Cuando el progreso llega al 100%, finalizar y mostrar el resultado
         if (progress >= 100) {
             clearInterval(interval);
-            let finalResult = getFinalResult(progress); // Obtener resultado final
+            let finalResult = getFinalResult();
             resultMessage.innerHTML = `
                 <span class="porcentaje">${finalResult.porcentaje}</span><br>
-                <span class="mensaje">${finalResult.mensaje}</span>
+                <span class="mensaje">${finalResult.mensaje}</span><br>
+                <button id="reiniciar-btn">↻ Reiniciar</button>
             `;
-            resultMessage.style.display = "block"; // Mostrar el resultado
+            resultMessage.style.display = "block";
 
-            // Mostrar el botón de reiniciar
-            document.getElementById("reiniciar-btn").style.display = "block";
+            // Agregar evento al botón de reinicio
+            document.getElementById("reiniciar-btn").addEventListener("click", function() {
+                location.reload();
+            });
         }
-    }, 1500); // Cada 1.5 segundos incrementa el progreso
+    }, 1500);
 }
 
-// Función para obtener el resultado final basado en el porcentaje
 function getFinalResult() {
-    // Seleccionar un resultado aleatorio de frasesFinales
-    let resultadoAleatorio = frasesFinales[Math.floor(Math.random() * frasesFinales.length)];
-    return resultadoAleatorio;
+    return frasesFinales[Math.floor(Math.random() * frasesFinales.length)];
 }
-
-// Evento para reiniciar la página
-document.getElementById("reiniciar-btn").addEventListener("click", function() {
-    location.reload(); // Recarga la página
-});
