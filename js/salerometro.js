@@ -32,12 +32,12 @@ const frasesFinales = [
 ];
 
 // Escuchar cambios en el input de la cámara
-document.getElementById("camera-input").addEventListener("change", function(event) {
+document.getElementById("camera-input").addEventListener("change", function (event) {
     let file = event.target.files[0];
 
     if (file) {
         let reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             let photo = document.getElementById("photo");
             photo.src = e.target.result;
             photo.style.display = "block"; // Mostrar la imagen
@@ -51,6 +51,11 @@ document.getElementById("camera-input").addEventListener("change", function(even
     }
 });
 
+// Crear objetos de audio
+const sonidoAnalisis = new Audio("sounds/analisis.mp3");
+const sonidoResultado = new Audio("sounds/resultado.mp3");
+
+
 function iniciarAnalisis() {
     document.getElementById("overlay").style.display = "flex";
 
@@ -61,12 +66,18 @@ function iniciarAnalisis() {
     let progress = 0;
     let phraseIndex = 0;
 
+    if ("vibrate" in navigator) {
+        navigator.vibrate([500, 300, 500]); // Vibración: 500ms, pausa 300ms, 500ms
+    }
+
     let interval = setInterval(() => {
         progress += 6.67;
         progressBar.value = progress;
 
         if (phraseIndex < frasesAnalisis.length) {
             progressMessage.textContent = frasesAnalisis[phraseIndex++];
+            sonidoAnalisis.play();
+
         }
 
         if (progress >= 100) {
@@ -76,13 +87,26 @@ function iniciarAnalisis() {
                 <span class="porcentaje">${finalResult.porcentaje}</span><br>
                 <span class="mensaje">${finalResult.mensaje}</span><br>
                 <button id="reiniciar-btn">↻ Reiniciar</button>
+                <button id="compartir-btn">📤 Compartir en WhatsApp</button>
             `;
             resultMessage.style.display = "block";
+            sonidoResultado.play();
 
             // Agregar evento al botón de reinicio
-            document.getElementById("reiniciar-btn").addEventListener("click", function() {
+            document.getElementById("reiniciar-btn").addEventListener("click", function () {
                 location.reload();
             });
+            // Agregar evento al botón de compartir
+            document.getElementById("compartir-btn").addEventListener("click", function () {
+                let textoCompartir = `🔥 ¡Descubrí mi nivel de sal en el #Salerómetro! 🔮\n\n` +
+                    `Resultado: ${finalResult.porcentaje} 🌊\n` +
+                    `"${finalResult.mensaje}"\n\n` +
+                    `¿Te atreves a probarlo? 😏`;
+
+                let url = `https://wa.me/?text=${encodeURIComponent(textoCompartir)}`;
+                window.open(url, "_blank");
+            });
+
         }
     }, 1500);
 }
