@@ -16,19 +16,19 @@ const frasesAnalisis = [
 ];
 
 const frasesFinales = [
-    { porcentaje: "100%", mensaje: "Estás más salado que el chamoy." },
-    { porcentaje: "90%", mensaje: "Cuidado, podrías ser el próximo snack salado." },
-    { porcentaje: "80%", mensaje: "Pareces haber pasado demasiado tiempo en la playa." },
-    { porcentaje: "70%", mensaje: "No olvides hidratarte, ¡estás a punto de ser un snack salado!" },
-    { porcentaje: "60%", mensaje: "Prueba con un poco de agua... y suerte en la lotería." },
-    { porcentaje: "50%", mensaje: "Nivel bajo, pero todavía puedes brillar en la vida." },
-    { porcentaje: "40%", mensaje: "Estás casi en la zona de seguridad, ¡prueba con un poco de suerte!" },
-    { porcentaje: "30%", mensaje: "Perfecto para un toque de sazón, pero sin excederte." },
-    { porcentaje: "20%", mensaje: "Parece que has tenido un día tranquilo, ¡felicidades!" },
-    { porcentaje: "10%", mensaje: "Tan suave como una brisa fresca. ¡Nada de malas vibras aquí!" },
-    { porcentaje: "5%", mensaje: "Nivel bajo, prueba comprando un billete de lotería." },
-    { porcentaje: "1%", mensaje: "Estás casi puro, pero nunca está de más una pizca extra." },
-    { porcentaje: "0%", mensaje: "¡Eres más dulce que un caramelo, pero sin suerte en este análisis!" }
+    { porcentaje: "100% Salado", mensaje: "¡Estás más salado que el chamoy en pleno verano!" },
+    { porcentaje: "90% Salado", mensaje: "Si la mala suerte fuera un deporte, ya tendrías medalla de oro." },
+    { porcentaje: "80% Salado", mensaje: "Si llueve sopa, seguro te cae un tenedor en la cabeza." },
+    { porcentaje: "70% Salado", mensaje: "Tu horóscopo dice: 'Hoy no salgas de casa… ni mañana tampoco'." },
+    { porcentaje: "60% Salado", mensaje: "Tu suerte es como el wifi en la plaza pública: inestable y decepcionante." },
+    { porcentaje: "50% Salado", mensaje: "Ni suerte ni desgracia… pero mejor no juegues apuestas." },
+    { porcentaje: "40% Salado", mensaje: "Casi en la zona segura, pero si compras un billete de lotería, mejor guárdalo de recuerdo." },
+    { porcentaje: "30% Salado", mensaje: "Tienes el toque justo de sal, como unas buenas papas fritas." },
+    { porcentaje: "20% Salado", mensaje: "Tu suerte va mejorando, pero todavía no es momento de tentar al destino." },
+    { porcentaje: "10% Salado", mensaje: "Eres más fresco que una brisa en la playa, ¡disfruta tu buena racha!" },
+    { porcentaje: "5% Salado", mensaje: "Tu suerte es casi perfecta, ¡ve y compra un boleto de lotería!" },
+    { porcentaje: "1% Salado", mensaje: "Casi puro, pero nunca está de más un amuleto por si acaso." },
+    { porcentaje: "0% Salado", mensaje: "¡Eres más dulce que el algodón de azúcar, la suerte te sonríe!" }
 ];
 
 // Escuchar cambios en el input de la cámara

@@ -8,18 +8,24 @@
     <script defer src="js/salerometro.js"></script>
 </head>
 <body>
+
+    <!-- Botón de Salir -->
+    <button id="exit-button" onclick="window.location.href='index.html'">🚪 Salir</button>
+
     <div id="camera-container">
         <label for="camera-input" id="take-photo-btn">📷 Tomar foto</label>
         <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
         <img id="photo" src="img/foto.jpg" alt="Foto tomada">
     </div>
+
     <div id="overlay">
         <div id="progress-container">
-            <p id="progress-message">Esperando Aura del Paciente... Ingrese Fotografia</p>
+            <p id="progress-message">Esperando Aura del Paciente... Ingrese Fotografía</p>
             <div><progress id="progress-bar" value="0" max="100"></progress></div>
         </div>
     </div>
 
     <div id="result-message" style="display:none;"></div>
+
 </body>
 </html>

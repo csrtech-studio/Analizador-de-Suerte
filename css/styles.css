@@ -1,0 +1,64 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #6a4c93, #9b59b6); /* Colores más místicos: morados y lilas */
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centrado en el eje horizontal */
+    height: 100vh;
+    background-size: cover;
+}
+
+header {
+    background: rgba(0, 0, 0, 0.7); /* Fondo más oscuro para el encabezado */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); /* Más sombra para el efecto místico */
+}
+
+h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* Sombra más fuerte */
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 25px; /* Mayor espacio entre los botones */
+    margin-top: 30px;
+    flex-wrap: wrap; /* Permite que los botones se ajusten si la pantalla es pequeña */
+}
+
+nav a {
+    text-decoration: none;
+    padding: 18px 30px;
+    font-size: 1.4em; /* Fuente más grande */
+    font-weight: bold;
+    background: linear-gradient(45deg, #9b59b6, #6a4c93); /* Degradado místico de morado y lila */
+    color: white;
+    border-radius: 35px; /* Bordes más redondeados */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Más sombra */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Efecto de hover más pronunciado */
+}
+
+nav a:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3); /* Efecto al hacer clic más suave */
+}
+
+.hero-image {
+    margin-top: 40px;
+    max-width: 80%;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}

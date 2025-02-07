@@ -1,36 +1,42 @@
 /* Estilos generales */
 body {
-    background-image: url('../img/fondo.png'); /* Reemplaza con la URL o ruta de tu imagen */
-    background-size: cover;  /* Ajusta la imagen para cubrir toda la pantalla */
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
-    background-attachment: fixed; /* Hace que el fondo no se mueva al hacer scroll */
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    text-align: center;
+    height: 100vh; /* Ocupa toda la pantalla */
+    overflow: hidden; /* Evita el scroll */
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('../img/fondo.png'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Contenedor de la cámara */
 #camera-container {
-    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 500px;
     text-align: center;
-    max-width: 500px; /* Establece un ancho máximo fijo */
 }
-/* Aumentar el tamaño de la foto */
+
+/* Ajuste del tamaño de la foto */
 #photo {
     background: rgba(255, 255, 255, 0.85);
-    width: 100%; /* Mantiene el ancho dentro del contenedor */
-    max-width: 500px; /* No cambia de tamaño */
+    width: 100%;
+    max-width: 400px; /* Ajustado para móviles */
     height: auto;
-    display: block;
-    margin: 10px auto;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 
@@ -84,7 +90,7 @@ button:hover {
     margin-top: 10px; /* Espacio debajo de la foto */
 }
 
-/* Fondo semitransparente para mejor integración */
+/* Contenedor de progreso */
 #progress-container {
     background: rgba(255, 255, 255, 0.85); /* Semitransparente */
     padding: 20px;
@@ -92,27 +98,74 @@ button:hover {
     text-align: center;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     width: 80%;
-    max-width: 600px;
+    max-width: 280px;
+    min-width: 280px; /* Mantiene el ancho inicial */
+    height: 170px; /* Ajuste para acomodar mejor el contenido */
+    min-height: 170px; /* Evita que se reduzca */
+    max-height: 170px; /* Evita que se expanda */
     margin: 0 auto; /* Centrado */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Mantiene la barra fija y el texto alineado */
 }
 
+/* Texto del análisis */
+#progress-message {
+    min-height: 40px; /* Espacio suficiente para el texto */
+    font-size: 18px;
+    font-weight:bold;
+    color: rgb(95, 3, 3);
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Fuente divertida */
+    padding: 5px;
+    overflow: hidden; /* Evita que desborde */
+    word-wrap: break-word;
+}
 
 /* Barra de progreso */
 progress {
     width: 100%;
-    height: 20px;
-    margin: 10px 0;
-}
-#progress-message {
-    min-height: 40px; /* Ajusta según el tamaño promedio del texto */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: rgb(95, 3, 3);
+    height: 35px;
+    margin-top: auto; /* Mantiene la barra siempre en el mismo lugar */
+    appearance: none;
+    border-radius: 30px;
+    overflow: hidden;
+    background: #ddd;
+    position: relative;
 }
 
+/* Estilo interno de la barra de progreso */
+progress::-webkit-progress-bar {
+    background: #ddd;
+    border-radius: 30px;
+}
+
+/* Barra con efecto de espiral */
+progress::-webkit-progress-value {
+    background: linear-gradient(45deg, #00ff00, #008000);
+    border-radius: 30px;
+    transition: width 0.5s ease-in-out;
+    animation: spiralEffect 2s infinite linear;
+}
+
+/* Efecto de espiral animado */
+@keyframes spiralEffect {
+    0% {
+        background: conic-gradient(from 0deg, #00ff00, #008000);
+    }
+    25% {
+        background: conic-gradient(from 90deg, #00ff00, #008000);
+    }
+    50% {
+        background: conic-gradient(from 180deg, #00ff00, #008000);
+    }
+    75% {
+        background: conic-gradient(from 270deg, #00ff00, #008000);
+    }
+    100% {
+        background: conic-gradient(from 360deg, #00ff00, #008000);
+    }
+}
 
 /* Mensaje emergente (Modal) */
 #result-message {
@@ -121,14 +174,108 @@ progress {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
+    background: linear-gradient(135deg, #05dabdc5, #6c6eeb); /* Fondo en tonos cálidos y llamativos */
+    padding: 25px;
+    border-radius: 15px;
     text-align: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4);
+    max-width: 80%;
+    width: 300px;
+    animation: pop-in 0.4s ease-out; /* Animación al aparecer */
 }
 
+/* Animación de entrada */
+@keyframes pop-in {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Mensaje dentro del modal */
+#result-message p {
+    font-size: 30px;
+    font-weight: bold;
+    color: #290101;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+}
+
+/* Efecto vibrante para el porcentaje de sal */
+#result-message span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #310303;
+    text-shadow: 3px 3px 5px rgba(255, 0, 0, 0.6);
+    animation: vibrate 0.3s ease-in-out infinite alternate;
+}
+
+/* Animación de vibración */
+@keyframes vibrate {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+/* Botón de reinicio divertido */
 #reiniciar-btn {
-    display: block;
-    margin: 10px auto;
+    display: inline-block;
+    background: linear-gradient(45deg, #ff4081, #ff1744);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.5);
+    border: 2px solid #990000;
+}
+
+#reiniciar-btn:hover {
+    background: linear-gradient(45deg, #e6005c, #b20040);
+    transform: scale(1.1);
+}
+
+#reiniciar-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 6px rgba(255, 0, 0, 0.8);
+}
+
+/* Botón de Salir */
+#exit-button {
+    position: fixed;
+    top: 10px;
+    right: 10px; /* Cambié 'left' por 'right' para que esté en la esquina superior derecha */
+    background: linear-gradient(45deg, #ff0000, #ff7300);
+    color: white;
+    border: none;
+    padding: 8px 14px; /* Reduje el tamaño del padding */
+    font-size: 14px; /* Reduje el tamaño de la fuente */
+    font-weight: bold;
+    border-radius: 8px; /* Reducí el radio del borde */
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Efecto al pasar el mouse */
+#exit-button:hover {
+    background: linear-gradient(45deg, #ff7300, #ff0000);
+    transform: scale(1.1);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Efecto al hacer clic */
+#exit-button:active {
+    transform: scale(0.95);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
